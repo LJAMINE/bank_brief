@@ -1,41 +1,48 @@
-<?php 
+<?php
 include "../../config/config.php";
-include "../class/account.php";
 
 try {
-   
-    $nom=$_POST['nom'];
-    $balance=$_POST['balance'];
-    $accountType=$_POST['accountType'];
+    $nom = $_POST['nom'];
+    $balance = $_POST['balance'];
+    $accountType = $_POST['accountType'];
 
     if (!$nom || !$balance || !$accountType) {
         die("Invalid input data");
     }
 
-     $client = new account($nom, $balance, $accountType);
-
-     $stmt = $pdo->prepare(query: "INSERT INTO account (nom, balance, accountType) VALUES (:nom, :balance, :accountType)");
+    $stmt = $pdo->prepare("INSERT INTO account (nom, balance) VALUES (:nom, :balance)");
     $stmt->execute([
-        ':nom' => $client->getNom(),
-        ':balance' => $client->getBalance(),
-        ':accountType' => $client->getAccountType()
+        ':nom' => $nom,
+        ':balance' => $balance
     ]);
-    $lastId = $pdo->lastInsertId();
-    echo "Account created with ID: " . htmlspecialchars($lastId);
 
-     if ($accountType == "3") {  
-        $stmt = $pdo->prepare("INSERT INTO savingaccount (nom, balance, accountType) VALUES (:nom, :balance, :accountType)");
+    $lastId = $pdo->lastInsertId();
+
+    if ($accountType == "1") {
+        $stmt = $pdo->prepare("INSERT INTO businessaccount (fee, accountID) VALUES (:fee, :accountID)");
         $stmt->execute([
-            ':nom' => $client->getNom(),
-            ':balance' => $client->getBalance(),
-            ':accountType' => $client->getAccountType()
+            ':fee' => 50.00, 
+            ':accountID' => $lastId
         ]);
-        echo "god insert";
-    }else{
-        echo 'bad value';
+        echo "Business account created successfully!";
+    } elseif ($accountType == "2") { 
+        $stmt = $pdo->prepare("INSERT INTO currentaccount (limitt, accountID) VALUES (:limitt, :accountID)");
+        $stmt->execute([
+            ':limitt' => 5000.00, 
+            ':accountID' => $lastId
+        ]);
+        echo "Current account created successfully!";
+    } elseif ($accountType == "3") {
+        $stmt = $pdo->prepare("INSERT INTO savingaccount (interet, accountID) VALUES (:interet, :accountID)");
+        $stmt->execute([
+            ':interet' => 0.02,
+            ':accountID' => $lastId
+        ]);
+        echo "Saving account created successfully!";
+    } else {
+        echo "Invalid account type selected.";
     }
 } catch (PDOException $e) {
-    // error_log("Database error: " . $e->getMessage());
-    echo "Failed to insert data.";
+    echo "Database error: " . $e->getMessage();
 }
 ?>

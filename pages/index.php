@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 include('./../config/config.php');
 
@@ -9,19 +9,16 @@ include('./../config/config.php');
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PHP crud</title>
-  <!-- <link rel="stylesheet" href="./../style/style.css"> -->
-   
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
- 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <title>NeoBank - Account Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
   <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">NeoBank</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <a class="navbar-brand fw-bold" href="#">NeoBank</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
@@ -33,167 +30,105 @@ include('./../config/config.php');
           <a class="nav-link" href="./../pages/accounts/saving.php">Saving Accounts</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="./../pages/accounts/current.php">Current account</a>
+          <a class="nav-link" href="./../pages/accounts/current.php">Current Accounts</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="./../pages/accounts/business.php">business account</a>
+          <a class="nav-link" href="./../pages/accounts/business.php">Business Accounts</a>
         </li>
       </ul>
     </div>
   </div>
 </nav>
 <!-- End Navbar -->
-<!-- add a modal user -------------------------------------------------------->
-<div class="modal fade" tabindex="-1" id="addNewUserModal">
+
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="text-primary">All Accounts in NeoBank</h4>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addNewUserModal">Add Account</button>
+  </div>
+
+  <div id="showAlert"></div>
+
+  <!-- Table -->
+  <div class="table-responsive">
+    <table class="table table-hover table-bordered text-center align-middle">
+      <thead class="table-primary">
+        <tr>
+          <th>Account ID</th>
+          <th>Account Name</th>
+          <th>Balance</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Dynamic Data Goes Here -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Add Account Modal -->
+<div class="modal fade" id="addNewUserModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">add a new account</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title">Add New Account</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-<form id="add-user-form" class="p-2" method="POST" action="./function/senddata.php">
-  
-<div class="row mb-3">
-<div class="col">
-  <input type="text" name="nom"  class="form-control form-control-lg" placeholder="enter nom" required>
-  <div class="invalid-feedback">nom is required</div>
-</div>
-<div class="col">
-  <input type="number" name="balance"  class="form-control form-control-lg" placeholder="enter balance" required>
-  <div class="invalid-feedback">balance is required</div>
-</div>
-</div>
-<!-- <div class="mb-3">
-  <input type="number" name="accountType"  class="form-control form-control-lg " placeholder="enter accountType"required>
-  <div class="invalid-feedback">accountType is required</div>
-
-</div> -->
-<div class="mb-3">
-  <select name="accountType" class="form-control form-control-lg" required>
-    <option value="" disabled selected>Select account type</option>
-    <option value="1">Business account</option>
-    <option value="2">Current account</option>
-    <option value="3">Saving account</option>
-  </select>
-  <div class="invalid-feedback">Account type is required</div>
-</div>
-
-<div class="mb-3">
-  <input type="submit" value="Add User" class="btn btn-primary btn-block btn-lg" id="add-user-btn">
-</div>
-</form>
-
-    </div>
-      
+        <form id="add-user-form" method="POST" action="./function/senddata.php">
+          <div class="mb-3">
+            <input type="text" name="nom" class="form-control" placeholder="Enter Name" required>
+          </div>
+          <div class="mb-3">
+            <input type="number" name="balance" class="form-control" placeholder="Enter Balance" required>
+          </div>
+          <div class="mb-3">
+            <select name="accountType" class="form-select" required>
+              <option value="" disabled selected>Select Account Type</option>
+              <option value="1">Business Account</option>
+              <option value="2">Current Account</option>
+              <option value="3">Saving Account</option>
+            </select>
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Add Account</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </div>
-<!-- end a modal user------------------------------------------------------ -->
 
-
-
-
-
-
-
-<!-- edit ---------(----------------------------------------------------------------------------- -->
-<div class="modal fade" tabindex="-1" id="editNewUserModal">
+<!-- Edit Account Modal -->
+<div class="modal fade" id="editNewUserModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">edit account</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title">Edit Account</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-<form id="edit-user-form" class="p-2" novalidate>
-
-<input type="hidden" name="id" id="id">
-  
-<div class="row mb-3">
-<div class="col">
-  <input type="text" name="accountNum" id="accountNum" class="form-control form-control-lg" placeholder="enter acountNumF" required>
-  <div class="invalid-feedback">acountNum is required</div>
-</div>
-<div class="col">
-  <input type="text" name="holderName" id="holderName" class="form-control form-control-lg" placeholder="enter holderNameF" required>
-  <div class="invalid-feedback">holderName is required</div>
-</div>
-</div>
-<div class="mb-3">
-  <input type="number" name="balanceF" id="balanceF" class="form-control form-control-lg " placeholder="enter balanceF"required>
-  <div class="invalid-feedback">balance is required</div>
-
-</div>
-<!-- <div class="mb-3">
-  <select name="accountTypeF" class="form-control form-control-lg" required>
-    <option value="" disabled selected>Select account type</option>
-    <option value="1">Business account</option>
-    <option value="2">Current account</option>
-    <option value="3">Saving account</option>
-  </select>
-  <div class="invalid-feedback">Account type is required</div>
-</div> -->
-
-<div class="mb-3">
-  <input type="submit" value="update User" class="btn btn-success btn-block btn-lg" id="edit-user-btn">
-</div>
-</form>
-
-    </div>
-      
-    </div>
-  </div>
-</div>
-<!-- ---edit---------- ------------------------------------------------------------------------->
-<d class="container">
-  <div class="row mt-4">
-    <div class="col-lg-12 d-flex justify-content-between align-items-center">
-      <div>
-        <h4 class="text-primary" >all accounts in Neobank</h4>
-      </div>
-      <div>
-      <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#addNewUserModal">
-    add account
-</button>
-
-      </div>
-    </div>
-  </div>
-  <hr>
-
-<div class="row">
-  <div class="col-lg-12">
-    <div id="showAlert">
-
-    </div>
-  </div>
-</div>
-
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="table-responsive">
-        <table class="table table-striped table-bordered text-center">
-          <thead>
-            <tr>
-            <th>Account ID</th>
-
-              <th>Account Number</th>
-              <th>Holder Name </th>
-              <th>Balance</th>
-              <!-- <th>Account Type</th> -->
-              <th>action</th>
-             
-            </tr>
-          </thead>
-          <tbody>
-          
-          </tbody>
-        </table>
+        <form id="edit-user-form">
+          <input type="hidden" name="id" id="id">
+          <div class="mb-3">
+            <input type="text" name="accountNum" id="accountNum" class="form-control" placeholder="Account Number" required>
+          </div>
+          <div class="mb-3">
+            <input type="text" name="holderName" id="holderName" class="form-control" placeholder="Holder Name" required>
+          </div>
+          <div class="mb-3">
+            <input type="number" name="balanceF" id="balanceF" class="form-control" placeholder="Balance" required>
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-success">Update Account</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </div>
-</body>
+
 <script src="main.js"></script>
+</body>
 </html>

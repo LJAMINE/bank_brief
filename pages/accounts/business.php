@@ -31,8 +31,8 @@
 </nav> -->
 
 <a href="./../index.php" style="text-decoration: none; color: inherit; display: inline-flex; align-items: center;">
-        <i class="fa-solid fa-right-from-bracket" style="font-size: 40px; margin: 20px;"></i>
-    </a>
+  <i class="fa-solid fa-right-from-bracket" style="font-size: 40px; margin: 20px; transform: scaleX(-1);"></i>
+</a>
 
 <!-- Container -->
 <div class="container mt-4">
