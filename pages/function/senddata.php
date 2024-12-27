@@ -1,7 +1,8 @@
 <?php
+
 include "../../config/config.php";
 
-try {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nom = $_POST['nom'];
     $balance = $_POST['balance'];
     $accountType = $_POST['accountType'];
@@ -10,39 +11,58 @@ try {
         die("Invalid input data");
     }
 
-    $stmt = $pdo->prepare("INSERT INTO account (nom, balance) VALUES (:nom, :balance)");
-    $stmt->execute([
-        ':nom' => $nom,
-        ':balance' => $balance
-    ]);
+    try {
+        $stmt = $pdo->prepare("INSERT INTO account (nom, balance) VALUES (:nom, :balance)");
+        $stmt->execute([
+            ':nom' => $nom,
+            ':balance' => $balance
+        ]);
 
-    $lastId = $pdo->lastInsertId();
+        $lastId = $pdo->lastInsertId();
 
-    if ($accountType == "1") {
-        $stmt = $pdo->prepare("INSERT INTO businessaccount (fee, accountID) VALUES (:fee, :accountID)");
-        $stmt->execute([
-            ':fee' => 50.00, 
-            ':accountID' => $lastId
-        ]);
-        echo "Business account created successfully!";
-    } elseif ($accountType == "2") { 
-        $stmt = $pdo->prepare("INSERT INTO currentaccount (limitt, accountID) VALUES (:limitt, :accountID)");
-        $stmt->execute([
-            ':limitt' => 5000.00, 
-            ':accountID' => $lastId
-        ]);
-        echo "Current account created successfully!";
-    } elseif ($accountType == "3") {
-        $stmt = $pdo->prepare("INSERT INTO savingaccount (interet, accountID) VALUES (:interet, :accountID)");
-        $stmt->execute([
-            ':interet' => 0.02,
-            ':accountID' => $lastId
-        ]);
-        echo "Saving account created successfully!";
-    } else {
-        echo "Invalid account type selected.";
+        if ($accountType == "1") {
+            $fee = $_POST['fee'];
+            if (!is_numeric($fee)) {
+                die("Invalid fee value");
+            }
+
+            $stmt = $pdo->prepare("INSERT INTO businessaccount (fee, accountID) VALUES (:fee, :accountID)");
+            $stmt->execute([
+                ':fee' => $fee,
+                ':accountID' => $lastId
+            ]);
+            echo "Business account created successfully!";
+        } elseif ($accountType == "2") {
+            $limitt = $_POST['limitt'];
+
+            if (!is_numeric($limitt)) {
+                die("Invalid limit value");
+            }
+
+            $stmt = $pdo->prepare("INSERT INTO currentaccount (limitt, accountID) VALUES (:limitt, :accountID)");
+            $stmt->execute([
+                ':limitt' => $limitt,
+                ':accountID' => $lastId
+            ]);
+            echo "Current account created successfully!";
+        } elseif ($accountType == "3") {
+            // Saving Account
+            $interet = $_POST['interet'];
+
+            if (!is_numeric($interet)) {
+                die("Invalid interest rate");
+            }
+
+            $stmt = $pdo->prepare("INSERT INTO savingaccount (interet, accountID) VALUES (:interet, :accountID)");
+            $stmt->execute([
+                ':interet' => $interet,
+                ':accountID' => $lastId
+            ]);
+            echo "Saving account created successfully!";
+        } else {
+            echo "Invalid account type selected.";
+        }
+    } catch (PDOException $e) {
+        echo "Database error: " . $e->getMessage();
     }
-} catch (PDOException $e) {
-    echo "Database error: " . $e->getMessage();
 }
-?>
