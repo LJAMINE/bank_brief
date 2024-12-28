@@ -33,5 +33,12 @@ class Account {
         return $stmt->execute([$this->nom, $this->balance, $this->accountType]);
     }
 
- 
+
+
+    public function deleteAccount() {
+        $stmt = $this->pdo->prepare("DELETE FROM account WHERE accountID = ?");
+        return $stmt->execute([$this->id]);
+    }
+
+  
 }

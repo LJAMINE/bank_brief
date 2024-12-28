@@ -24,7 +24,10 @@ class CurrentAccount extends Account{
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    
+    // public function deleteAccount() {
+    //     $stmt = $this->pdo->prepare("DELETE FROM currentaccount WHERE accountID = ?");
+    //     $stmt->execute([$this->id]);
+    // }
 }
 
 ?>

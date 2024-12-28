@@ -6,6 +6,8 @@ include '../class/current_class.php';
 $savingAccount = new CurrentAccount($pdo);
 
 $result = $savingAccount->getAllcurrentaccount();
+// $result = $savingAccount->getAllbusinessaccount();
+
 
 ?>
 
@@ -47,7 +49,11 @@ $result = $savingAccount->getAllcurrentaccount();
               <td> <?php echo $account['accountID'] ?></td>
               <td> <button class="btn btn-warning btn-sm">Edit</button></td>
               <td>
-              <button class="btn btn-danger btn-sm">Delete</button></td>
+              <form action="../function/delete_current.php" method="POST">
+                                        <input type="hidden" name="id_to_delete" value="<?php echo $account['accountID']; ?>">
+                                        <button type="submit" name="delete" class="btn btn-danger btn-sm" >delete
+                                        </button>
+                                    </form>            </td>
             </tr>
           <?php } ?>
       </tbody>

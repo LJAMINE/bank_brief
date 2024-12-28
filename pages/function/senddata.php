@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 ':fee' => $fee,
                 ':accountID' => $lastId
             ]);
-            echo "Business account created successfully!";
+            header("location:../index.php");
         } elseif ($accountType == "2") {
             $limitt = $_POST['limitt'];
 
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 ':limitt' => $limitt,
                 ':accountID' => $lastId
             ]);
-            echo "Current account created successfully!";
+            header("location:../index.php");
         } elseif ($accountType == "3") {
             // Saving Account
             $interet = $_POST['interet'];
@@ -58,7 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 ':interet' => $interet,
                 ':accountID' => $lastId
             ]);
-            echo "Saving account created successfully!";
+            header("location:../index.php");
+            // echo "Saving account created successfully!";
         } else {
             echo "Invalid account type selected.";
         }
