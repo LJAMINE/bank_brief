@@ -1,6 +1,17 @@
 <?php
 
 include('./../config/config.php');
+include('./class/account.php');
+
+
+$account=new Account($pdo);
+
+$result=$account->getAllAccounts();
+
+// $stmt = $pdo->prepare("SELECT * FROM account");
+// $stmt->execute();
+// $result = $stmt->fetchAll();
+// print_r($result)
 
 ?>
 
@@ -59,18 +70,22 @@ include('./../config/config.php');
             <th>Account ID</th>
             <th>Account Name</th>
             <th>Balance</th>
-            <th>Actions</th>
+            <th>edit</th>
+            <th>delete</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-
-      </tbody>
+          <?php foreach ($result as $account) { ?>
+            <tr>
+              <td> <?php echo $account['accountID'] ?></td>
+              <td> <?php echo $account['nom'] ?></td>
+              <td> <?php echo $account['balance'] ?></td>
+              <td> <button class="btn btn-warning btn-sm">Edit</button></td>
+              <td>
+              <button class="btn btn-danger btn-sm">Delete</button></td>
+            </tr>
+          <?php } ?>
+        </tbody>
       </table>
     </div>
   </div>
